@@ -1,0 +1,55 @@
+
+// 1) Знайти всіх дітей в яких сердня оцінка 4.2
+// 2) Знайди всіх дітей з 1 класу
+// 3) Знайти всіх дітей які вивчають фізику
+// 4) Знайти всіх дітей, батьки яких працюють в науці ( scientist )
+// 5) Знайти дітей, в яких середня оцінка більша за 4
+// 6) Знайти найкращого учня
+// 7) Знайти найгіршого учня
+// 8) Знайти топ 3 учнів
+// 9) Знайти середній бал по школі
+// 10) Знайти середній бал дітей які вивчають математику або фізику
+// 11) Знайти середній бал по 2 класі
+// 12) Знайти дітей з не повною сімєю
+// 13) Знайти батьків які не працюють
+// 14) Не працюючих батьків влаштувати офіціантами
+// 15) Вигнати дітей, які мають середній бал менше ніж 2.5
+// 16) Дітям, батьки яких працюють в освіті ( teacher ) поставити 5
+// 17) Знайти дітей які вчаться в початковій школі (до 5 класу) і вивчають фізику ( physics )
+// 18) Знайти найуспішніший клас
+
+// Solving
+// db.getCollection('users').find({"avgScore": 4.2})
+// db.getCollection('users').find({"class":1})
+// db.getCollection('users').find({lessons: 'english'})
+// db.getCollection('users').find({ 'parents.profession': { $in: ['scientist'] } })
+// db.getCollection('users').find().sort({"avgScore": -1 }).limit(1) Max
+// db.getCollection('users').find({"avgScore": { $gte: 4}})
+
+// db.getCollection('users').aggregate([
+//     {
+//         $group: {
+//             _id: null,
+//             maxScore: {$max: "$avgScore"}
+//         }
+//     }
+// ])
+  
+// db.getCollection('users').aggregate([
+//     {
+//         $group: {
+//             _id: null,
+//             minScore: {$min: "$avgScore"}
+//         }
+//     }
+//  ])
+
+// db.getCollection('users').find().sort({"avgScore":-1}).limit(3)
+// 
+
+
+
+
+
+
+

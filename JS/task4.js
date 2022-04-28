@@ -117,35 +117,35 @@ game.increasing2()
 // Якшо потужність процесора менша ніж 500. І оперативка менша за 8 потрібно видати помилку, (алерт, або консоль)
 // що на цьому відрі ігри не запускаються.
 
-class Gaming extends PK{
+// class Gaming extends PK{
 
-    constructor(operativka, power, name,fps){
-        super(operativka, power, name,fps);
+//     constructor(operativka, power, name,fps){
+//         super(operativka, power, name,fps);
         
-    }
-    parametrs(fps){
-        this.fps=fps*2;
-        console.log(fps)
-    }
-    method(){
-        let smallerPower=this.power*0.1;
-        this.power=this.power-smallerPower;
-        console.log(this.power)
-    }
-  checking(){
-      if(this.power<500 || this.operativka<8){
-          alert(`На цьому відрі ігри не запускаються)`)
+//     }
+//     parametrs(fps){
+//         this.fps=fps*2;
+//         console.log(fps)
+//     }
+//     method(){
+//         let smallerPower=this.power*0.1;
+//         this.power=this.power-smallerPower;
+//         console.log(this.power)
+//     }
+//   checking(){
+//       if(this.power<500 || this.operativka<8){
+//           alert(`На цьому відрі ігри не запускаються)`)
 
-      }
-  }
+//       }
+//   }
 
   
-}
+// }
 
-let  value=new Gaming(5,650,'GTA',22);
-value.parametrs();
-value.method();
-value.checking()
+// let  value=new Gaming(5,650,'GTA',22);
+// value.parametrs();
+// value.method();
+// value.checking()
 
 
 

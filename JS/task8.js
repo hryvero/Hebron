@@ -18,8 +18,26 @@ const list = [
     
     return acc;
 
-  },Object.create(null));
+  },{});
 console.log(reducer);
+
+// let maper=list.map((item)=>{
+ 
+ 
+//   items={
+    
+//   };
+// return item
+
+// })
+// console.log(maper)
+
+// for(elem of list){
+ 
+//   elem[elem.course]=elem[elem.course] || [];
+//   elem[elem.course].push(elem)
+//   console.log(elem[elem.course])
+// }
 
 
 
