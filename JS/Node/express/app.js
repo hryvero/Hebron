@@ -12,22 +12,31 @@ app.get("/welcome", (req, res) => {
   res.render("start");
 });
 //List of users
-app.get("/welcome/users", (req, res) => {
+app.get("/users", (req, res) => {
   res.render("users", { DBofUsers });
 });
 //List of cars
-app.get("/welcome/cars", (req, res) => {
+app.get("/cars", (req, res) => {
   res.render("cars", { DBofCars });
 });
 
-app.get("/welcome/users/:userIndex", (req, res) => {
+app.get("/users/:userIndex", (req, res) => {
   const { userIndex } = req.params;
-  res.json(DBofUsers[userIndex] || {});
+  console.log(req.params);
+  if (DBofUsers[userIndex]) {
+    res.json(DBofUsers[userIndex]);
+  } else {
+    res.status(404).json("User is not found");
+  }
 });
 
-app.get("/welcome/cars/:carIndex", (req, res) => {
+app.get("/cars/:carIndex", (req, res) => {
   const { carIndex } = req.params;
-  res.json(DBofCars[carIndex] || {});
+  if (DBofCars[carIndex]) {
+    res.json(DBofCars[userIndex]);
+  } else {
+    res.status(404).json("Car is not found");
+  }
 });
 app.listen(5000, () => {
   console.log("App listen 5000");
