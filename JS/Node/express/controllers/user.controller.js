@@ -21,6 +21,7 @@ module.exports = {
     }
     res.json(user);
   },
+
   deleteUser: (req, res) => {
     const { userIndex } = req.params;
     const users = DBofUsers[userIndex];
