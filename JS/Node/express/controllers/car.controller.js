@@ -1,19 +1,19 @@
-const DBofCars = require("../dataBase/cars");
+const Car = require("../dataBase/cars.model");
 
 module.exports = {
-  getAllCars: (req, res) => {
-    res.json(DBofCars);
+  getAllCars: async (req, res) => {
+    const cars = await Car.find();
+    res.json(cars);
   },
 
-  createCar: (req, res) => {
-    DBofCars.push(req.body);
-
-    res.json(DBofCars);
+  createCar: async (req, res) => {
+    const createdCar = await Car.create(req.body);
+    res.status(201).json(CacreatedCarr);
   },
 
-  deleteCar: (req, res) => {
+  deleteCar: async (req, res) => {
     const { carIndex } = req.params;
-    const cars = DBofCars[carIndex];
+    const cars = await Car.findById(carIndex);
 
     if (!cars) {
       res.status(404).json(`Car with id ${carIndex} not found`);
