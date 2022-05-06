@@ -13,3 +13,6 @@ const chekAutoIsExists = async (req, res, next) => {
     res.json(e);
   }
 };
+module.exports = {
+  chekAutoIsExists,
+};
