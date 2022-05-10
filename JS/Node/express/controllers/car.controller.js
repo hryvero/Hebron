@@ -1,24 +1,42 @@
 const Car = require("../dataBase/cars.model");
 
 module.exports = {
-  getAllCars: async (req, res) => {
-    const cars = await Car.find();
-    res.json(cars);
-  },
+  getAllCars: async (req, res, next) => {
+    try {
+      const { limit = 20, page = 1 } = req.query;
+      const skip = (page - 1) * limit;
+      const cars = await Car.find().limit(limit).skip(skip);
+      const count = await Car.count({});
 
-  createCar: async (req, res) => {
-    const createdCar = await Car.create(req.body);
-    res.status(201).json(CacreatedCarr);
-  },
-
-  deleteCar: async (req, res) => {
-    const { carIndex } = req.params;
-    const cars = await Car.findById(carIndex);
-
-    if (!cars) {
-      res.status(404).json(`Car with id ${carIndex} not found`);
-      return;
+      res.json({
+        page,
+        perPage: limit,
+        count,
+        data: cars,
+      });
+    } catch (e) {
+      next(e);
     }
-    res.send(cars);
+  },
+
+  createCar: async (req, res, next) => {
+    try {
+      const createCar = await Car.create(req.body);
+
+      res.json(createCar);
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  deleteCar: async (req, res, next) => {
+    try {
+      const { carIndex } = req.params;
+
+      const deleteUser = await User.deleteOne({ _id: userId });
+      res.json(deleteUser);
+    } catch (e) {
+      next(e);
+    }
   },
 };

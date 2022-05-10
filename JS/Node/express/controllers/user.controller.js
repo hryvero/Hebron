@@ -1,37 +1,64 @@
 const User = require("../dataBase/user.model");
 
 module.exports = {
-  getAllUser: async (req, res) => {
-    const users = await User.find();
-    res.json(users);
-  },
+  getAllUser: async (req, res, next) => {
+    try {
+      const { limit = 20, page = 1 } = req.query;
+      const skip = (page - 1) * limit;
+      const users = await User.find().limit(limit).skip(skip);
+      const count = await User.count({});
 
-  createUser: async (req, res) => {
-    const createdUser = await User.create(req.body);
-
-    res.status(201).json(createdUser);
-  },
-
-  getUserById: async (req, res) => {
-    const { userIndex } = req.params;
-    const user = await User.findById(userIndex);
-
-    if (!user) {
-      res.status(404).json(`User with id ${userIndex} not not found`);
-      return;
+      res.json({
+        page,
+        perPage: limit,
+        count,
+        data: users,
+      });
+    } catch (e) {
+      next(e);
     }
-    res.json(user);
   },
 
-  deleteUser: (req, res) => {
-    const { userIndex } = req.params;
-    const users = User[userIndex];
+  createUser: async (req, res, next) => {
+    try {
+      const createUser = await User.create(req.body);
 
-    if (!users) {
-      res.status(404).json(`User with id ${userIndex} not found`);
-      return;
+      res.json(createUser);
+    } catch (e) {
+      next(e);
     }
+  },
 
-    res.send(users);
+  getUserById: async (req, res, next) => {
+    try {
+      res.json(req.user);
+    } catch (e) {
+      next(e);
+    }
+  },
+  updateUser: async (req, res, next) => {
+    try {
+      const { userId } = req.params;
+      const updateUser = await User.updateOne(
+        { _id: userId },
+        { $set: req.body }
+      );
+
+      res.json(updateUser);
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  deleteUser: async (req, res, next) => {
+    try {
+      const { userIndex } = req.params;
+
+      const deleteUser = await User.deleteOne({ _id: userIndex });
+
+      res.json(deleteUser);
+    } catch (e) {
+      next(e);
+    }
   },
 };

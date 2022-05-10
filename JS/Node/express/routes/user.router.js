@@ -6,6 +6,8 @@ const userMiddlewares = require("../middlewares/user.midlewares");
 const userRouter = Router();
 
 userRouter.get("/", userController.getAllUser);
+userRouter.get("/:userIndex", userController.getUserById);
+userRouter.put("/:userIndex", userController.updateUser);
 
 userRouter.post(
   "/",
@@ -15,7 +17,5 @@ userRouter.post(
 );
 
 userRouter.delete("/:userIndex", userController.deleteUser);
-
-userRouter.get("/:userIndex", userController.getUserById);
 
 module.exports = userRouter;
