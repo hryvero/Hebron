@@ -33,8 +33,8 @@ module.exports = {
     try {
       const { carIndex } = req.params;
 
-      const deleteUser = await User.deleteOne({ _id: userId });
-      res.json(deleteUser);
+      const deleteCar = await User.deleteOne({ _id: carIndex });
+      res.json(deleteCar);
     } catch (e) {
       next(e);
     }

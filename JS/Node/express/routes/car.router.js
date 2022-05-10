@@ -9,10 +9,15 @@ carRouter.get("/list", carController.getAllCars);
 
 carRouter.post(
   "/create",
+  carMiddleware.chekYearIsNorm,
   carMiddleware.chekAutoIsExists,
   carController.createCar
 );
 
-carRouter.delete("/:carIndex", carController.deleteCar);
+carRouter.delete(
+  "/:carIndex",
+  carMiddleware.checkIdisValid,
+  carController.deleteCar
+);
 
 module.exports = carRouter;

@@ -33,6 +33,18 @@ const checkAgeValid = (req, res, next) => {
     next(e);
   }
 };
+const checkIdisValid = (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    if (!userId) {
+      throw new ApiError("Your id is not valid :(", 406);
+    }
+    next();
+  } catch (e) {
+    next(e);
+  }
+};
 
 const checkGender = (req, res, next) => {
   try {
@@ -48,5 +60,6 @@ const checkGender = (req, res, next) => {
 module.exports = {
   checkIsEmailDuplicate,
   checkAgeValid,
+  checkIdisValid,
   checkGender,
 };

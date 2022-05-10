@@ -52,9 +52,9 @@ module.exports = {
 
   deleteUser: async (req, res, next) => {
     try {
-      const { userIndex } = req.params;
+      const { userId } = req.params;
 
-      const deleteUser = await User.deleteOne({ _id: userIndex });
+      const deleteUser = await User.deleteOne({ _id: userId });
 
       res.json(deleteUser);
     } catch (e) {
