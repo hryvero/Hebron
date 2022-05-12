@@ -25,6 +25,12 @@ userRouter.post(
   userMiddlewares.checkAgeValid,
   userController.createUser
 );
+userRouter.post(
+  "/",
+  userMiddlewares.newUserValidator,
+  userMiddlewares.checkIsEmailDuplicate,
+  userController.createUser
+);
 
 userRouter.delete(
   "/:userIndex",

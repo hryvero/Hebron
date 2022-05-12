@@ -6,9 +6,8 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const { PORT1, MONGO_URL } = require("./configs/config");
-const userRouter = require("./routes/user.router");
-const carRouter = require("./routes/car.router");
-const reportRouter = require("./routes/report.router");
+const { reportRouter, userRouter, carRouter } = require("./routes");
+const ApiError = require("./errors/ApiError");
 
 const app = express();
 
@@ -31,10 +30,6 @@ function _notFoundHandler(req, res, next) {
 }
 
 function _mainErrorHandler(err, req, res, next) {
-  console.log("____________________________-");
-  console.log(err);
-  console.log("____________________________-");
-
   res.status(err.status || 500).json({
     message: err.message || "Server error",
     status: err.status,

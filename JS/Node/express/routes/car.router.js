@@ -5,10 +5,11 @@ const carMiddleware = require("../middlewares/car.middlewares");
 
 const carRouter = Router();
 
-carRouter.get("/list", carController.getAllCars);
+carRouter.get("/list", carMiddleware.newCarValidator, carController.getAllCars);
 
 carRouter.post(
   "/create",
+  carMiddleware.newCarValidator,
   carMiddleware.chekYearIsNorm,
   carMiddleware.chekAutoIsExists,
   carController.createCar

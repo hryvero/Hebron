@@ -1,5 +1,6 @@
 const Car = require("../dataBase/user.model");
 const ApiError = require("../errors/ApiError");
+const { carValidator } = require("../validators");
 
 const chekAutoIsExists = async (req, res, next) => {
   try {
@@ -39,8 +40,26 @@ const checkIdisValid = (req, res, next) => {
     next(e);
   }
 };
+
+const newCarValidator = (req, res, next) => {
+  try {
+    const { error, value } = carValidator.userCarSubSchema.validate(req.body);
+
+    if (error) {
+      next(new ApiError(error.details[0].message, 400));
+      return;
+    }
+
+    req.body = value;
+
+    next();
+  } catch (e) {
+    next(e);
+  }
+};
 module.exports = {
   chekAutoIsExists,
   chekYearIsNorm,
   checkIdisValid,
+  newCarValidator,
 };

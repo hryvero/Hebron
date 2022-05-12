@@ -20,6 +20,7 @@ const User = new Schema(
       enum: Object.values(userRolesEnum),
       default: userRolesEnum.USER,
     },
+    password: { type: String, required: true, default: null, select: false },
   },
   { timestamps: true }
 );
