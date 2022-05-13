@@ -1,13 +1,14 @@
-const Car = require("../dataBase/user.model");
+const { Car } = require("../dataBase/user.model");
 const ApiError = require("../errors/ApiError");
-const { carValidator } = require("../validators");
+const { carValidator, carUpdateValidator } = require("../validators");
+const { carError, statusCode } = require("../constants");
 
 const chekAutoIsExists = async (req, res, next) => {
   try {
     const { model = "" } = req.body;
 
     if (!model) {
-      throw new ApiError("Model is required", 400);
+      throw new ApiError(carError.notFoundCar, statusCode.notFoundStatus);
     }
 
     next();
@@ -20,7 +21,7 @@ const chekYearIsNorm = async (req, res, next) => {
     const { year = "" } = req.body;
 
     if (year < 1990 && year > getFullYear()) {
-      throw new ApiError("Year of auto is not aveliable", 404);
+      throw new ApiError(carError.notValidYear, statusCode.notValidStatus);
     }
 
     next();
@@ -33,7 +34,7 @@ const checkIdisValid = (req, res, next) => {
     const { carIndex } = req.params;
 
     if (!carIndex) {
-      throw new ApiError("Your id is not valid :(", 406);
+      throw new ApiError(carError.notValidId, statusCode.notValidStatus);
     }
     next();
   } catch (e) {
@@ -57,9 +58,29 @@ const newCarValidator = (req, res, next) => {
     next(e);
   }
 };
+
+const updateCar = (res, req, next) => {
+  try {
+    const { value, error } =
+      carUpdateValidator.carUpdateShemeValidator.validate(req.body);
+
+    if (error) {
+      next(new ApiError(error.details[0].message, statusCode.badRequestStatus));
+      return;
+    }
+
+    req.body = Object.assign(req.body, value);
+
+    next();
+  } catch (e) {
+    next(e);
+  }
+};
+
 module.exports = {
   chekAutoIsExists,
   chekYearIsNorm,
   checkIdisValid,
   newCarValidator,
+  updateCar,
 };

@@ -1,13 +1,18 @@
-const User = require("../dataBase/user.model");
+const { User } = require("../dataBase/index");
 const ApiError = require("../errors/ApiError");
-const { userValidator } = require("../validators");
+const {
+  userValidator,
+  UserSchemaUpdateValidator,
+  queryValidator,
+} = require("../validators");
+const { userError, statusCode } = require("../constants");
 
 const checkIsEmailDuplicate = async (req, res, next) => {
   try {
     const { email = " " } = req.body;
 
     if (!email) {
-      throw new ApiError("Email is required", 400);
+      throw new ApiError(userError.notFound, statusCode.notFoundStatus);
     }
 
     const isUserPresent = await User.findOne({
@@ -15,7 +20,7 @@ const checkIsEmailDuplicate = async (req, res, next) => {
     });
 
     if (isUserPresent) {
-      throw new ApiError("User with this email already present", 409);
+      throw new ApiError(userError.duplicateEmail, statusCode.badRequestStatus);
     }
 
     next();
@@ -28,7 +33,7 @@ const checkAgeValid = (req, res, next) => {
   try {
     const { age } = req.params;
     if (age >= 99 && age < 10) {
-      throw new ApiError("Your age is not valid :(", 406);
+      throw new ApiError(userError.notFound, statusCode.notValidStatus);
     }
     next();
   } catch (e) {
@@ -40,7 +45,7 @@ const checkIdisValid = (req, res, next) => {
     const { userId } = req.params;
 
     if (!userId) {
-      throw new ApiError("Your id is not valid :(", 406);
+      throw new ApiError(userError.notValidId, statusCode.notValidStatus);
     }
     next();
   } catch (e) {
@@ -52,7 +57,7 @@ const checkGender = (req, res, next) => {
   try {
     const { gender } = req.params;
     if (!gender == "man" && !gender == "woman" && !gender == "they") {
-      throw new ApiError("Gender is not found", 404);
+      throw new ApiError(userError.notFound, statusCode.notFoundStatus);
     }
     next();
   } catch (e) {
@@ -76,10 +81,46 @@ const newUserValidator = (req, res, next) => {
     next(e);
   }
 };
+
+const updateUserValidator = (res, req, next) => {
+  try {
+    const { value, error } = UserSchemaUpdateValidator.UpdateSheme.validate(
+      req.body
+    );
+
+    if (error) {
+      next(new ApiError(error.details[0].message, statusCode.badRequestStatus));
+      return;
+    }
+
+    req.body = Object.assign(req.body, value);
+
+    next();
+  } catch (e) {
+    next(e);
+  }
+};
+
+const validateUserQuery = (req, res, next) => {
+  try {
+    const { error } = queryValidator.querySchemaValidator.validate(req.query);
+
+    if (error) {
+      next(new ApiError(error.details[0].message, 400));
+      return;
+    }
+
+    next();
+  } catch (e) {
+    next(e);
+  }
+};
 module.exports = {
   checkIsEmailDuplicate,
   checkAgeValid,
   checkIdisValid,
   checkGender,
   newUserValidator,
+  updateUserValidator,
+  validateUserQuery,
 };

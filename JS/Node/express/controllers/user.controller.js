@@ -1,4 +1,4 @@
-const User = require("../dataBase/user.model");
+const { userModel } = require("../dataBase/index");
 const { authService } = require("../services/index");
 
 module.exports = {
@@ -6,8 +6,8 @@ module.exports = {
     try {
       const { limit = 20, page = 1 } = req.query;
       const skip = (page - 1) * limit;
-      const users = await User.find().limit(limit).skip(skip);
-      const count = await User.count({});
+      const users = await userModel.find().limit(limit).skip(skip);
+      const count = await userModel.count({});
 
       res.json({
         page,
@@ -23,7 +23,7 @@ module.exports = {
   createUser: async (req, res, next) => {
     try {
       const hashPassword = await authService.hashPassword(req.body.password);
-      const createUser = await User.create({
+      const createUser = await userModel.create({
         ...req.body,
         password: hashPassword,
       });
@@ -44,7 +44,7 @@ module.exports = {
   updateUser: async (req, res, next) => {
     try {
       const { userId } = req.params;
-      const updateUser = await User.updateOne(
+      const updateUser = await userModel.updateOne(
         { _id: userId },
         { $set: req.body }
       );

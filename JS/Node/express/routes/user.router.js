@@ -1,40 +1,43 @@
 const { Router } = require("express");
 
-const userController = require("../controllers/user.controller");
-const userMiddlewares = require("../middlewares/user.midlewares");
+const { userController } = require("../controllers/index");
+const { userMiddleware } = require("../middlewares/index");
 
 const userRouter = Router();
 
 userRouter.get("/", userController.getAllUser);
 userRouter.get(
   "/:userIndex",
-  userMiddlewares.checkIdisValid,
+  userMiddleware.checkIdisValid,
   userController.getUserById
 );
 userRouter.put(
   "/:userIndex",
-  userMiddlewares.checkIdisValid,
-  userMiddlewares.checkGender,
+  userMiddleware.newUserValidator,
+  userMiddleware.checkIdisValid,
+  userMiddleware.checkGender,
   userController.updateUser
 );
 
 userRouter.post(
-  "/",
-  userMiddlewares.checkGender,
-  userMiddlewares.checkIsEmailDuplicate,
-  userMiddlewares.checkAgeValid,
+  "/:userIndex",
+  userMiddleware.newUserValidator,
+  userMiddleware.checkIdisValid,
+  userMiddleware.checkGender,
+  userMiddleware.checkIsEmailDuplicate,
+  userMiddleware.checkAgeValid,
   userController.createUser
 );
 userRouter.post(
   "/",
-  userMiddlewares.newUserValidator,
-  userMiddlewares.checkIsEmailDuplicate,
+  userMiddleware.newUserValidator,
+  userMiddleware.checkIsEmailDuplicate,
   userController.createUser
 );
 
 userRouter.delete(
   "/:userIndex",
-  userMiddlewares.checkIdisValid,
+  userMiddleware.checkIdisValid,
   userController.deleteUser
 );
 

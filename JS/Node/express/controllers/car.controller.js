@@ -1,12 +1,12 @@
-const Car = require("../dataBase/cars.model");
+const { carModel } = require("../dataBase/index");
 
 module.exports = {
   getAllCars: async (req, res, next) => {
     try {
       const { limit = 20, page = 1 } = req.query;
       const skip = (page - 1) * limit;
-      const cars = await Car.find().limit(limit).skip(skip);
-      const count = await Car.count({});
+      const cars = await carModel.find().limit(limit).skip(skip);
+      const count = await carModel.count({});
 
       res.json({
         page,
@@ -21,7 +21,7 @@ module.exports = {
 
   createCar: async (req, res, next) => {
     try {
-      const createCar = await Car.create(req.body);
+      const createCar = await carModel.create(req.body);
 
       res.json(createCar);
     } catch (e) {
@@ -33,7 +33,7 @@ module.exports = {
     try {
       const { carIndex } = req.params;
 
-      const deleteCar = await User.deleteOne({ _id: carIndex });
+      const deleteCar = await carModel.deleteOne({ _id: carIndex });
       res.json(deleteCar);
     } catch (e) {
       next(e);
