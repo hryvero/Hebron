@@ -10,8 +10,6 @@ carRouter.get("/list", carMiddleware.newCarValidator, carController.getAllCars);
 carRouter.post(
   "/create",
   carMiddleware.newCarValidator,
-  carMiddleware.newCarValidator,
-  carMiddleware.chekYearIsNorm,
   carMiddleware.chekAutoIsExists,
   carController.createCar
 );

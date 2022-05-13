@@ -16,19 +16,7 @@ const chekAutoIsExists = async (req, res, next) => {
     next(e);
   }
 };
-const chekYearIsNorm = async (req, res, next) => {
-  try {
-    const { year = "" } = req.body;
 
-    if (year < 1990 && year > getFullYear()) {
-      throw new ApiError(carError.notValidYear, statusCode.notValidStatus);
-    }
-
-    next();
-  } catch (e) {
-    next(e);
-  }
-};
 const checkIdisValid = (req, res, next) => {
   try {
     const { carIndex } = req.params;
@@ -79,7 +67,6 @@ const updateCar = (res, req, next) => {
 
 module.exports = {
   chekAutoIsExists,
-  chekYearIsNorm,
   checkIdisValid,
   newCarValidator,
   updateCar,

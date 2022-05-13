@@ -6,26 +6,13 @@ const { userMiddleware } = require("../middlewares/index");
 const userRouter = Router();
 
 userRouter.get("/", userController.getAllUser);
-userRouter.get(
-  "/:userIndex",
-  userMiddleware.checkIdisValid,
-  userController.getUserById
-);
-userRouter.put(
-  "/:userIndex",
-  userMiddleware.newUserValidator,
-  userMiddleware.checkIdisValid,
-  userMiddleware.checkGender,
-  userController.updateUser
-);
+userRouter.get("/:userIndex", userController.getUserById);
+userRouter.put("/:userIndex", userController.updateUser);
 
 userRouter.post(
   "/:userIndex",
   userMiddleware.newUserValidator,
-  userMiddleware.checkIdisValid,
-  userMiddleware.checkGender,
   userMiddleware.checkIsEmailDuplicate,
-  userMiddleware.checkAgeValid,
   userController.createUser
 );
 userRouter.post(
@@ -35,10 +22,6 @@ userRouter.post(
   userController.createUser
 );
 
-userRouter.delete(
-  "/:userIndex",
-  userMiddleware.checkIdisValid,
-  userController.deleteUser
-);
+userRouter.delete("/:userIndex", userController.deleteUser);
 
 module.exports = userRouter;

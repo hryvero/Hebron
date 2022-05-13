@@ -9,11 +9,7 @@ const { userError, statusCode } = require("../constants");
 
 const checkIsEmailDuplicate = async (req, res, next) => {
   try {
-    const { email = " " } = req.body;
-
-    if (!email) {
-      throw new ApiError(userError.notFound, statusCode.notFoundStatus);
-    }
+    const { email = "" } = req.body;
 
     const isUserPresent = await User.findOne({
       email: email.toLowerCase().trim(),
@@ -23,42 +19,6 @@ const checkIsEmailDuplicate = async (req, res, next) => {
       throw new ApiError(userError.duplicateEmail, statusCode.badRequestStatus);
     }
 
-    next();
-  } catch (e) {
-    next(e);
-  }
-};
-
-const checkAgeValid = (req, res, next) => {
-  try {
-    const { age } = req.params;
-    if (age >= 99 && age < 10) {
-      throw new ApiError(userError.notFound, statusCode.notValidStatus);
-    }
-    next();
-  } catch (e) {
-    next(e);
-  }
-};
-const checkIdisValid = (req, res, next) => {
-  try {
-    const { userId } = req.params;
-
-    if (!userId) {
-      throw new ApiError(userError.notValidId, statusCode.notValidStatus);
-    }
-    next();
-  } catch (e) {
-    next(e);
-  }
-};
-
-const checkGender = (req, res, next) => {
-  try {
-    const { gender } = req.params;
-    if (!gender == "man" && !gender == "woman" && !gender == "they") {
-      throw new ApiError(userError.notFound, statusCode.notFoundStatus);
-    }
     next();
   } catch (e) {
     next(e);
@@ -117,9 +77,6 @@ const validateUserQuery = (req, res, next) => {
 };
 module.exports = {
   checkIsEmailDuplicate,
-  checkAgeValid,
-  checkIdisValid,
-  checkGender,
   newUserValidator,
   updateUserValidator,
   validateUserQuery,
