@@ -6,4 +6,5 @@ module.exports = {
   userError: require("./userError.enum"),
   carError: require("./carError.enum"),
   statusCode: require("./statusCode"),
+  tokenTypeEnum: require("./tokenType.enum"),
 };

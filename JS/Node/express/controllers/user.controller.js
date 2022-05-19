@@ -59,7 +59,7 @@ module.exports = {
     try {
       const { userId } = req.params;
 
-      const deleteUser = await User.deleteOne({ _id: userId });
+      const deleteUser = await userModel.deleteOne({ _id: userId });
 
       res.json(deleteUser);
     } catch (e) {

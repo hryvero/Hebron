@@ -15,12 +15,6 @@ userRouter.post(
   userMiddleware.checkIsEmailDuplicate,
   userController.createUser
 );
-userRouter.post(
-  "/",
-  userMiddleware.newUserValidator,
-  userMiddleware.checkIsEmailDuplicate,
-  userController.createUser
-);
 
 userRouter.delete("/:userIndex", userController.deleteUser);
 

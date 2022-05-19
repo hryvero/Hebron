@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const { PORT1, MONGO_URL } = require("./configs/config");
-const { reportRouter, userRouter, carRouter } = require("./routes");
+const { reportRouter, userRouter, carRouter, authRouter } = require("./routes");
 const ApiError = require("./errors/ApiError");
 
 const app = express();
@@ -18,6 +18,7 @@ app.set("views", "./hbs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use("/auth", authRouter);
 app.use("/reports", reportRouter);
 app.use("/users", userRouter);
 app.use("/cars", carRouter);

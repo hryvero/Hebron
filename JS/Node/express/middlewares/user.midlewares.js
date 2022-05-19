@@ -25,6 +25,40 @@ const checkIsEmailDuplicate = async (req, res, next) => {
   }
 };
 
+const getUserDynamically = (
+  paramName = "_id",
+  where = "body",
+  dataBaseField = paramName
+) => {
+  return async (req, res, next) => {
+    try {
+      const findObject = req[where];
+
+      if (!findObject || typeof findObject !== "object") {
+        next(new ApiError("Wrong search param in middleware"));
+        return;
+      }
+
+      const param = findObject[paramName];
+
+      const user = await User.findOne({ [dataBaseField]: param }).select(
+        "+password"
+      );
+
+      if (!user) {
+        next(new ApiError("User not found", 404));
+        return;
+      }
+
+      req.user = user;
+
+      next();
+    } catch (e) {
+      next(e);
+    }
+  };
+};
+
 const newUserValidator = (req, res, next) => {
   try {
     const { error, value } = userValidator.newUserJoiSchema.validate(req.body);
@@ -78,6 +112,7 @@ const validateUserQuery = (req, res, next) => {
 module.exports = {
   checkIsEmailDuplicate,
   newUserValidator,
+  getUserDynamically,
   updateUserValidator,
   validateUserQuery,
 };
