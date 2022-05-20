@@ -7,24 +7,6 @@ const {
 } = require("../validators");
 const { userError, statusCode } = require("../constants");
 
-// const checkIsEmailDuplicate = async (req, res, next) => {
-//   try {
-//     const { email = "" } = req.body;
-
-//     const isUserPresent = await userModel.findOne({
-//       email: email.toLowerCase().trim(),
-//     });
-
-//     if (isUserPresent) {
-//       throw new ApiError(userError.duplicateEmail, statusCode.badRequestStatus);
-//     }
-
-//     next();
-//   } catch (e) {
-//     next(e);
-//   }
-// };
-
 const getUserDynamically = (
   paramName = "_id",
   where = "body",
