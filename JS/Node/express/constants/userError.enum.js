@@ -4,4 +4,5 @@ module.exports = {
   duplicateEmail: "This email is occupied",
   wrongPassword: "The password is not correct",
   notFound: "Not Found",
+  wrongParams: "Your Params are wrong",
 };

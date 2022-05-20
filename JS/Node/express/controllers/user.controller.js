@@ -36,7 +36,12 @@ module.exports = {
 
   getUserById: async (req, res, next) => {
     try {
-      res.json(req.user);
+      const { userId } = req.params;
+      const getUser = await userModel.findOne(
+        { _id: userId },
+        { $set: req.body }
+      );
+      res.json(getUser);
     } catch (e) {
       next(e);
     }

@@ -5,6 +5,7 @@ module.exports = {
   carModelsEnum: require("./car-models.enum"),
   userError: require("./userError.enum"),
   carError: require("./carError.enum"),
+  authError: require("./authErrors.enum"),
   statusCode: require("./statusCode"),
   tokenTypeEnum: require("./tokenType.enum"),
 };

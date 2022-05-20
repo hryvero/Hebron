@@ -1,4 +1,4 @@
-const { User } = require("../dataBase/index");
+const { userModel } = require("../dataBase/index");
 const ApiError = require("../errors/ApiError");
 const {
   userValidator,
@@ -7,23 +7,23 @@ const {
 } = require("../validators");
 const { userError, statusCode } = require("../constants");
 
-const checkIsEmailDuplicate = async (req, res, next) => {
-  try {
-    const { email = "" } = req.body;
+// const checkIsEmailDuplicate = async (req, res, next) => {
+//   try {
+//     const { email = "" } = req.body;
 
-    const isUserPresent = await User.findOne({
-      email: email.toLowerCase().trim(),
-    });
+//     const isUserPresent = await userModel.findOne({
+//       email: email.toLowerCase().trim(),
+//     });
 
-    if (isUserPresent) {
-      throw new ApiError(userError.duplicateEmail, statusCode.badRequestStatus);
-    }
+//     if (isUserPresent) {
+//       throw new ApiError(userError.duplicateEmail, statusCode.badRequestStatus);
+//     }
 
-    next();
-  } catch (e) {
-    next(e);
-  }
-};
+//     next();
+//   } catch (e) {
+//     next(e);
+//   }
+// };
 
 const getUserDynamically = (
   paramName = "_id",
@@ -35,18 +35,18 @@ const getUserDynamically = (
       const findObject = req[where];
 
       if (!findObject || typeof findObject !== "object") {
-        next(new ApiError("Wrong search param in middleware"));
+        next(new ApiError(userError.wrongParams));
         return;
       }
 
       const param = findObject[paramName];
 
-      const user = await User.findOne({ [dataBaseField]: param }).select(
-        "+password"
-      );
+      const user = await userModel
+        .findOne({ [dataBaseField]: param })
+        .select("+password");
 
       if (!user) {
-        next(new ApiError("User not found", 404));
+        next(new ApiError(userError.notFoundUser, statusCode.notFoundStatus));
         return;
       }
 
@@ -64,7 +64,7 @@ const newUserValidator = (req, res, next) => {
     const { error, value } = userValidator.newUserJoiSchema.validate(req.body);
 
     if (error) {
-      next(new ApiError(error.details[0].message, 400));
+      next(new ApiError(error.details[0].message, statusCode.badRequestStatus));
       return;
     }
 
@@ -100,7 +100,7 @@ const validateUserQuery = (req, res, next) => {
     const { error } = queryValidator.querySchemaValidator.validate(req.query);
 
     if (error) {
-      next(new ApiError(error.details[0].message, 400));
+      next(new ApiError(error.details[0].message, statusCode.badRequestStatus));
       return;
     }
 
@@ -110,7 +110,6 @@ const validateUserQuery = (req, res, next) => {
   }
 };
 module.exports = {
-  checkIsEmailDuplicate,
   newUserValidator,
   getUserDynamically,
   updateUserValidator,

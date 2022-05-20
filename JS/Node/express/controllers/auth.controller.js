@@ -33,4 +33,22 @@ module.exports = {
       next(e);
     }
   },
+
+  refresh: async (req, res, next) => {
+    try {
+      const refresh_token = req.get("Autorization");
+      await OAuth.deleteOne({ refresh_token });
+
+      const tokenPair = authService.generateTokenPair({ userId: user._id });
+
+      await OAuth.create({ user_id: user._id, ...tokenPair });
+
+      res.json({
+        ...tokenPair,
+        user,
+      });
+    } catch (e) {
+      next(e);
+    }
+  },
 };

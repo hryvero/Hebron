@@ -18,4 +18,10 @@ authRouter.post(
   authController.logout
 );
 
+authRouter.get(
+  "/refresh",
+  authMiddleware.checkRefreshToken,
+  authController.refresh
+);
+
 module.exports = authRouter;

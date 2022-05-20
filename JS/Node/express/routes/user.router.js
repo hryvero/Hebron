@@ -12,7 +12,12 @@ userRouter.put("/:userIndex", userController.updateUser);
 userRouter.post(
   "/:userIndex",
   userMiddleware.newUserValidator,
-  userMiddleware.checkIsEmailDuplicate,
+  userController.createUser
+);
+
+userRouter.post(
+  "/",
+  userMiddleware.newUserValidator,
   userController.createUser
 );
 
