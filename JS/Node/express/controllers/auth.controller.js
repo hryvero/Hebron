@@ -1,4 +1,5 @@
-const { authService } = require("../services");
+const { authService, emailService } = require("../services");
+const { emailActionsEnum } = require("../constants");
 const { OAuth } = require("../dataBase/index");
 
 module.exports = {
@@ -8,6 +9,11 @@ module.exports = {
         user,
         body: { password },
       } = req;
+
+      await emailService.sendMail(
+        "grigorivveronika@gmail.com",
+        emailActionsEnum.WELCOME
+      );
 
       await authService.comparePasswords(user.password, password);
 

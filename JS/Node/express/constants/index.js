@@ -8,4 +8,6 @@ module.exports = {
   authError: require("./authErrors.enum"),
   statusCode: require("./statusCode"),
   tokenTypeEnum: require("./tokenType.enum"),
+
+  emailActionsEnum: require("./email-actions.enum"),
 };

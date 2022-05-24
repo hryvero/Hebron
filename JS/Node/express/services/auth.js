@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const ApiError = require("../errors/ApiError");
+const { authError, userError, statusCode } = require("../constants/index");
 const {
   ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_SECRET,
@@ -12,7 +13,7 @@ async function comparePasswords(hashPassword, password) {
   const isPasswordSame = await bcrypt.compare(password, hashPassword);
 
   if (!isPasswordSame) {
-    throw new ApiError("Wrong password", 400);
+    throw new ApiError(userError.wrongPassword, statusCode.badRequestStatus);
   }
 }
 
@@ -34,15 +35,6 @@ function generateTokenPair(encodeData = {}) {
   };
 }
 
-// function generateRefreshToken() {
-//   const payload = {
-//     id: user._id,
-//     tokenType: REFRESH,
-//   };
-//   const time = { expiresIn: "30d" };
-//   return jwt.sign(payload, REFRESH_TOKEN_SECRET, time);
-// }
-
 function validateToken(token, tokenType = tokenTypeEnum.ACCESS) {
   try {
     let secretWord = ACCESS_TOKEN_SECRET;
@@ -53,7 +45,10 @@ function validateToken(token, tokenType = tokenTypeEnum.ACCESS) {
 
     return jwt.verify(token, secretWord);
   } catch (e) {
-    throw new ApiError(e.message || "Invalid token", 401);
+    throw new ApiError(
+      e.message || authError.notValidToken,
+      statusCode.notValidStatus
+    );
   }
 }
 module.exports = {
