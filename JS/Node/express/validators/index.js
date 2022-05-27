@@ -5,4 +5,5 @@ module.exports = {
   queryValidator: require("./query.validator"),
   carUpdateValidator: require("./updateCar.validator"),
   authValidator: require("./auth.validator"),
+  passwordValidator: require("./password.validator"),
 };

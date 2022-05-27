@@ -1,8 +1,8 @@
-const { OAuth } = require("../dataBase/index");
+const { OAuth, ActionToken } = require("../dataBase/index");
 const ApiError = require("../errors/ApiError");
 const { statusCode, authError } = require("../constants/index");
 const { authService } = require("../services");
-const { authValidator } = require("../validators");
+const { authValidator, passwordValidator } = require("../validators");
 
 async function checkAccessToken(req, res, next) {
   try {
@@ -59,8 +59,52 @@ function isLoginDataValid(req, res, next) {
   }
 }
 
+function checkActionToken(actionType) {
+  return async function (req, res, next) {
+    try {
+      const { token } = req.body;
+
+      authService.validateToken(token, actionType);
+
+      const tokenData = await ActionToken.findOne({
+        token,
+        actionType,
+      }).populate("user_id");
+
+      if (!tokenData || !tokenData.user_id) {
+        return next(
+          new ApiError(authError.notValidToken, statusCode.notFoundStatus)
+        );
+      }
+
+      req.user = tokenData.user_id;
+      next();
+    } catch (e) {
+      next(e);
+    }
+  };
+}
+function validatePassword(req, res, next) {
+  try {
+    const { error } = passwordValidator.PasswordSchema.validate(req.body);
+
+    if (error) {
+      next(
+        new ApiError(error.details[0].message, codeStatus.bad_request_status)
+      );
+      return;
+    }
+
+    next();
+  } catch (e) {
+    next(e);
+  }
+}
+
 module.exports = {
   checkAccessToken,
   checkRefreshToken,
   isLoginDataValid,
+  validatePassword,
+  checkActionToken,
 };

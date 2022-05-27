@@ -1,4 +1,4 @@
-const { emailActionsEnum } = require("../constants");
+const { emailActionsEnum, actionTypesEnum } = require("../constants");
 
 module.exports = {
   [emailActionsEnum.WELCOME]: {
@@ -8,5 +8,9 @@ module.exports = {
   [emailActionsEnum.INVITE]: {
     subject: "Invite for you",
     templateName: "invite",
+  },
+  [actionTypesEnum.FORGOT_PASSWORD]: {
+    subject: "Removing password",
+    templateName: "forgotPassword",
   },
 };

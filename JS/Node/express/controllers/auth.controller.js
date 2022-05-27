@@ -1,6 +1,7 @@
 const { authService, emailService } = require("../services");
-const { emailActionsEnum } = require("../constants");
-const { OAuth } = require("../dataBase/index");
+const { emailActionsEnum, actionTypesEnum } = require("../constants");
+const { userModel, OAuth, ActionToken } = require("../dataBase/index");
+const { FRONTEND_URL } = require("../configs/config");
 
 module.exports = {
   login: async (req, res, next) => {
@@ -35,6 +36,64 @@ module.exports = {
       await OAuth.deleteMany({ user_id: req.authUser._id });
 
       res.json("ok");
+    } catch (e) {
+      next(e);
+    }
+  },
+  changePassword: async (req, res, next) => {
+    try {
+      const {
+        user: { _id, password },
+      } = req;
+
+      const newPassword = await authService.hashPassword(body.password);
+
+      await userModel.updateOne({ _id: user._id }, { password: newPassword });
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  forgotPassword: async (req, res, next) => {
+    try {
+      const {
+        user: { _id, name },
+      } = req;
+
+      const token = authService.generateActionToken({ user_id: _id });
+
+      await ActionToken.create({
+        token,
+        user_id: _id,
+        actionType: actionTypesEnum.FORGOT_PASSWORD,
+      });
+
+      const forgotPasswordUrl = `${FRONTEND_URL}/password/forgot?token=${token}`;
+      await emailService.sendMail(
+        "grigorivveronika@gmail.com",
+        emailActionsEnum.FORGOT_PASSWORD,
+        { forgotPasswordUrl, userName: name }
+      );
+
+      res.json("Check your post");
+
+      next(e);
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  setNewPassword: async (req, res, next) => {
+    try {
+      const { user, body } = req;
+
+      const newPassword = await authService.hashPassword(body.password);
+
+      await userModel.updateOne({ _id: user._id }, { password: newPassword });
+      await OAuth.deleteMany({ user_id: user._id });
+      await ActionToken.deleteOne({ token: body.token });
+
+      res.json("Success");
     } catch (e) {
       next(e);
     }

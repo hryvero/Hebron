@@ -6,6 +6,7 @@ const { authError, userError, statusCode } = require("../constants/index");
 const {
   ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_SECRET,
+  ACTION_TOKEN_SECRET,
 } = require("../configs/config");
 const { tokenTypeEnum } = require("../constants/index");
 
@@ -35,6 +36,10 @@ function generateTokenPair(encodeData = {}) {
   };
 }
 
+function generateActionToken(encodeData = {}) {
+  return jwt.sign(encodeData, ACTION_TOKEN_SECRET, { expiresIn: "24h" });
+}
+
 function validateToken(token, tokenType = tokenTypeEnum.ACCESS) {
   try {
     let secretWord = ACCESS_TOKEN_SECRET;
@@ -55,5 +60,6 @@ module.exports = {
   comparePasswords,
   hashPassword,
   generateTokenPair,
+  generateActionToken,
   validateToken,
 };
