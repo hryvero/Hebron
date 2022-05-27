@@ -43,4 +43,10 @@ authRouter.put(
   authMiddleware.checkAccessToken,
   authController.changePassword
 ),
+  authRouter.put(
+    "password/reset",
+    authMiddleware.validatePassword,
+    authMiddleware.checkAccessToken,
+    authController.resetPassword
+  ),
   (module.exports = authRouter);

@@ -54,6 +54,17 @@ module.exports = {
     }
   },
 
+  resetPassword: async (req, res, next) => {
+    try {
+      const {
+        user: { password },
+      } = req;
+
+      await userModel.deleteOne({ password });
+    } catch (e) {
+      next(e);
+    }
+  },
   forgotPassword: async (req, res, next) => {
     try {
       const {
