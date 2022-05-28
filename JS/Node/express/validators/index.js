@@ -6,4 +6,5 @@ module.exports = {
   carUpdateValidator: require("./updateCar.validator"),
   authValidator: require("./auth.validator"),
   passwordValidator: require("./password.validator"),
+  emailValidator: require("./email.validator"),
 };

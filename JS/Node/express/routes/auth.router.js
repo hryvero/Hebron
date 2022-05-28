@@ -27,21 +27,16 @@ authRouter.get(
 
 authRouter.post(
   "/password/forgot",
+  authMiddleware.validateEmail,
   userMiddleware.getUserDynamically("email"),
   authController.forgotPassword
 );
 
-authRouter.put(
-  "password/reset",
-  authMiddleware.validatePassword,
-  authMiddleware.checkAccessToken,
-  authController.resetPassword
-),
-  authRouter.patch(
-    "/password/set",
-    authMiddleware.checkActionToken(actionTypesEnum.FORGOT_PASSWORD),
-    authController.setNewPassword
-  );
+authRouter.patch(
+  "/password/set",
+  authMiddleware.checkActionToken(actionTypesEnum.FORGOT_PASSWORD),
+  authController.setNewPassword
+);
 
 authRouter.put(
   "password/change",

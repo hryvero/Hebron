@@ -2,7 +2,11 @@ const { OAuth, ActionToken } = require("../dataBase");
 const ApiError = require("../errors/ApiError");
 const { statusCode, authError } = require("../constants");
 const { authService } = require("../services");
-const { authValidator, passwordValidator } = require("../validators");
+const {
+  authValidator,
+  passwordValidator,
+  emailValidator,
+} = require("../validators");
 
 async function checkAccessToken(req, res, next) {
   try {
@@ -89,9 +93,21 @@ function validatePassword(req, res, next) {
     const { error } = passwordValidator.PasswordSchema.validate(req.body);
 
     if (error) {
-      next(
-        new ApiError(error.details[0].message, codeStatus.bad_request_status)
-      );
+      next(new ApiError(error.details[0].message, statusCode.badRequestStatus));
+      return;
+    }
+
+    next();
+  } catch (e) {
+    next(e);
+  }
+}
+function validateEmail(req, res, next) {
+  try {
+    const { error } = emailValidator.EmailSchema.validate(req.body);
+
+    if (error) {
+      next(new ApiError(error.details[0].message, statusCode.badRequestStatus));
       return;
     }
 
@@ -106,5 +122,6 @@ module.exports = {
   checkRefreshToken,
   isLoginDataValid,
   validatePassword,
+  validateEmail,
   checkActionToken,
 };

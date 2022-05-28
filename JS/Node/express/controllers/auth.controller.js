@@ -11,7 +11,7 @@ module.exports = {
         body: { password },
       } = req;
 
-      await emailService.sendMail(RECIEVER_EMAIL, emailActionsEnum.WELCOME);
+      // await emailService.sendMail(user.email, emailActionsEnum.WELCOME);
 
       await authService.comparePasswords(user.password, password);
 
@@ -51,17 +51,6 @@ module.exports = {
     }
   },
 
-  resetPassword: async (req, res, next) => {
-    try {
-      const {
-        user: { password },
-      } = req;
-
-      await userModel.updateOne({ password });
-    } catch (e) {
-      next(e);
-    }
-  },
   forgotPassword: async (req, res, next) => {
     try {
       const {
@@ -78,7 +67,7 @@ module.exports = {
 
       const forgotPasswordUrl = `${FRONTEND_URL}/password/forgot?token=${token}`;
       await emailService.sendMail(
-        RECIEVER_EMAIL,
+        user.email,
         emailActionsEnum.FORGOT_PASSWORD,
         { forgotPasswordUrl, userName: name }
       );
