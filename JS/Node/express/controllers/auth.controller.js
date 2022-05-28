@@ -1,7 +1,7 @@
 const { authService, emailService } = require("../services");
 const { emailActionsEnum, actionTypesEnum } = require("../constants");
 const { userModel, OAuth, ActionToken } = require("../dataBase");
-const { FRONTEND_URL, RECIEVER_EMAIL } = require("../configs/config");
+const { FRONTEND_URL } = require("../configs/config");
 
 module.exports = {
   login: async (req, res, next) => {

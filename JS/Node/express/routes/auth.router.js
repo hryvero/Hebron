@@ -34,6 +34,7 @@ authRouter.post(
 
 authRouter.patch(
   "/password/set",
+  authMiddleware.validatePassword,
   authMiddleware.checkActionToken(actionTypesEnum.FORGOT_PASSWORD),
   authController.setNewPassword
 );
