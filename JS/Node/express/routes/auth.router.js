@@ -31,11 +31,17 @@ authRouter.post(
   authController.forgotPassword
 );
 
-authRouter.patch(
-  "/password/set",
-  authMiddleware.checkActionToken(actionTypesEnum.FORGOT_PASSWORD),
-  authController.setNewPassword
-);
+authRouter.put(
+  "password/reset",
+  authMiddleware.validatePassword,
+  authMiddleware.checkAccessToken,
+  authController.resetPassword
+),
+  authRouter.patch(
+    "/password/set",
+    authMiddleware.checkActionToken(actionTypesEnum.FORGOT_PASSWORD),
+    authController.setNewPassword
+  );
 
 authRouter.put(
   "password/change",
@@ -43,10 +49,4 @@ authRouter.put(
   authMiddleware.checkAccessToken,
   authController.changePassword
 ),
-  authRouter.put(
-    "password/reset",
-    authMiddleware.validatePassword,
-    authMiddleware.checkAccessToken,
-    authController.resetPassword
-  ),
   (module.exports = authRouter);

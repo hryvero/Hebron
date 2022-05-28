@@ -8,6 +8,7 @@ module.exports = {
 
   USER_EMAIL: process.env.USER_EMAIL || "",
   USER_PASSWORD: process.env.USER_PASSWORD || "",
+  RECIEVER_EMAIL: "griforivveronika@gmail.com",
 
   FRONTEND_URL: "https://google.com",
 };

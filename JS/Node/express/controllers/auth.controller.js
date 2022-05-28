@@ -1,7 +1,7 @@
 const { authService, emailService } = require("../services");
 const { emailActionsEnum, actionTypesEnum } = require("../constants");
 const { userModel, OAuth, ActionToken } = require("../dataBase");
-const { FRONTEND_URL } = require("../configs/config");
+const { FRONTEND_URL, RECIEVER_EMAIL } = require("../configs/config");
 
 module.exports = {
   login: async (req, res, next) => {
@@ -11,10 +11,7 @@ module.exports = {
         body: { password },
       } = req;
 
-      // await emailService.sendMail(
-      //   "grigorivveronika@gmail.com",
-      //   emailActionsEnum.WELCOME
-      // );
+      await emailService.sendMail(RECIEVER_EMAIL, emailActionsEnum.WELCOME);
 
       await authService.comparePasswords(user.password, password);
 
@@ -60,7 +57,7 @@ module.exports = {
         user: { password },
       } = req;
 
-      await userModel.deleteOne({ password });
+      await userModel.updateOne({ password });
     } catch (e) {
       next(e);
     }
@@ -81,7 +78,7 @@ module.exports = {
 
       const forgotPasswordUrl = `${FRONTEND_URL}/password/forgot?token=${token}`;
       await emailService.sendMail(
-        "grigorivveronika@gmail.com",
+        RECIEVER_EMAIL,
         emailActionsEnum.FORGOT_PASSWORD,
         { forgotPasswordUrl, userName: name }
       );
