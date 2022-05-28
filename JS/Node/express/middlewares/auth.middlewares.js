@@ -1,6 +1,6 @@
-const { OAuth, ActionToken } = require("../dataBase/index");
+const { OAuth, ActionToken } = require("../dataBase");
 const ApiError = require("../errors/ApiError");
-const { statusCode, authError } = require("../constants/index");
+const { statusCode, authError } = require("../constants");
 const { authService } = require("../services");
 const { authValidator, passwordValidator } = require("../validators");
 

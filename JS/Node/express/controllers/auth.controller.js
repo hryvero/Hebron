@@ -1,6 +1,6 @@
 const { authService, emailService } = require("../services");
 const { emailActionsEnum, actionTypesEnum } = require("../constants");
-const { userModel, OAuth, ActionToken } = require("../dataBase/index");
+const { userModel, OAuth, ActionToken } = require("../dataBase");
 const { FRONTEND_URL } = require("../configs/config");
 
 module.exports = {
@@ -11,10 +11,10 @@ module.exports = {
         body: { password },
       } = req;
 
-      await emailService.sendMail(
-        "grigorivveronika@gmail.com",
-        emailActionsEnum.WELCOME
-      );
+      // await emailService.sendMail(
+      //   "grigorivveronika@gmail.com",
+      //   emailActionsEnum.WELCOME
+      // );
 
       await authService.comparePasswords(user.password, password);
 

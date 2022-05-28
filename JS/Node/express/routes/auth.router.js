@@ -2,7 +2,7 @@ const { Router } = require("express");
 
 const { authController } = require("../controllers");
 const { authMiddleware, userMiddleware } = require("../middlewares");
-const { actionTypesEnum } = require("../constants/index");
+const { actionTypesEnum } = require("../constants");
 
 const authRouter = Router();
 
@@ -32,7 +32,7 @@ authRouter.post(
 );
 
 authRouter.patch(
-  "/password/forgot",
+  "/password/set",
   authMiddleware.checkActionToken(actionTypesEnum.FORGOT_PASSWORD),
   authController.setNewPassword
 );
