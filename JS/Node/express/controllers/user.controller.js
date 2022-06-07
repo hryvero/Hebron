@@ -1,5 +1,6 @@
 const { userModel } = require("../dataBase/index");
 const { authService } = require("../services/index");
+const s3Service = require("../services/s3.service");
 
 module.exports = {
   getAllUser: async (req, res, next) => {
@@ -67,6 +68,23 @@ module.exports = {
       const deleteUser = await userModel.deleteOne({ _id: userId });
 
       res.json(deleteUser);
+    } catch (e) {
+      next(e);
+    }
+  },
+
+  uploadUserPhoto: async (req, res, next) => {
+    try {
+      const avatar = req.files.avatar;
+      const user = req.params;
+
+      const stringPromise = await s3Service.uploadFile(
+        avatar,
+        "user",
+        user._id
+      );
+
+      res.json(stringPromise);
     } catch (e) {
       next(e);
     }

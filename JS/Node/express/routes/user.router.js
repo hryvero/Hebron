@@ -16,6 +16,12 @@ userRouter.post(
 );
 
 userRouter.post(
+  "/:userIndex/photo",
+  userMiddleware.checkUserPhoto,
+  userController.uploadUserPhoto
+);
+
+userRouter.post(
   "/",
   userMiddleware.newUserValidator,
   userController.createUser

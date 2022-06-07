@@ -1,5 +1,6 @@
 const express = require("express");
 const { engine } = require("express-handlebars");
+const fileUpload = require("express-fileupload");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 
@@ -18,6 +19,7 @@ app.set("views", "./hbs");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.use(fileUpload({}));
 app.use("/auth", authRouter);
 app.use("/reports", reportRouter);
 app.use("/users", userRouter);

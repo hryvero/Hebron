@@ -6,6 +6,7 @@ const {
   queryValidator,
 } = require("../validators");
 const { userError, statusCode } = require("../constants");
+const { constants } = require("../constants");
 
 const getUserDynamically = (
   paramName = "_id",
@@ -91,9 +92,37 @@ const validateUserQuery = (req, res, next) => {
     next(e);
   }
 };
+
+const checkUserPhoto = (req, res, next) => {
+  try {
+    if (!req.files || !req.files.avatar) {
+      next(new ApiError(userError.notFound, statusCode.badRequestStatus));
+      return;
+    }
+
+    const { size, mimetype } = req.files.avatar;
+
+    if (size > constants.IMAGE_MAX_SIZE) {
+      next(
+        new ApiError(`Max file sile should be 5MB`, statusCode.badRequestStatus)
+      );
+      return;
+    }
+
+    if (!constants.IMAGE_MIMETYPES.includes(mimetype)) {
+      next(new ApiError(userError.wrongParams, statusCode.badRequestStatus));
+      return;
+    }
+
+    next();
+  } catch (e) {
+    next(e);
+  }
+};
 module.exports = {
   newUserValidator,
   getUserDynamically,
   updateUserValidator,
   validateUserQuery,
+  checkUserPhoto,
 };
