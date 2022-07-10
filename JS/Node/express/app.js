@@ -1,16 +1,32 @@
 const express = require("express");
+const http = require("http");
 const { engine } = require("express-handlebars");
 const fileUpload = require("express-fileupload");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const socketIO = require("socket.io");
+require("module-alias/register");
 
 dotenv.config();
 
 const { PORT1, MONGO_URL } = require("./configs/config");
-const { reportRouter, userRouter, carRouter, authRouter } = require("./routes");
+const {
+  reportRouter,
+  userRouter,
+  carRouter,
+  authRouter,
+  socketRouter,
+} = require("./routes");
 const ApiError = require("./errors/ApiError");
+const morgan = require("morgan");
 
 const app = express();
+
+const server = http.createServer(app);
+
+const io = socketIO(server, { cors: { origin: "*" } });
+
+io.on("connection", (socket) => socketRouter(io, socket));
 
 app.engine(".hbs", engine({ defaultLayout: false }));
 app.set("view engine", ".hbs");
@@ -20,6 +36,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(fileUpload({}));
+app.use(morgan("dev"));
+
 app.use("/auth", authRouter);
 app.use("/reports", reportRouter);
 app.use("/users", userRouter);
@@ -44,6 +62,6 @@ mongoose.connect(MONGO_URL).then((value) => {
   console.log("Connection success");
 });
 
-app.listen(PORT1, () => {
+server.listen(PORT1, () => {
   console.log(`App listen ${PORT1}`);
 });

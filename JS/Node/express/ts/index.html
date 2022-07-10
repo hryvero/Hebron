@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.socket.io/4.5.0/socket.io.min.js"
+        integrity="sha384-7EyYLQZgWBi67fBtVxw60/OWl1kjsfrPFcaU0pp0nAh+i8FD068QogUvg85Ewy1k"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <h1>Hello</h1>
+
+    <button id="send">Send Message</button>
+    <button id="broadcast">Droadcast</button>
+    <button id="broadcastAvoid">Broadcast for rest users</button>
+    <script>
+        const socket = io("http://localhost:5000");
+
+        let elemById = document.getElementById("send");
+        let broadcast = document.getElementById("broadcast");
+        let broadcastAvoid = document.getElementById("broadcastAvoid")
+
+        elemById.onclick = () => {
+            socket.emit("message:save", { data: "Veronika had Paris" })
+        }
+
+        broadcast.onclick = () => {
+            socket.emit("broadcast:all", {})
+
+        }
+
+        broadcastAvoid.onclick = () => {
+            socket.emit("broadcast:not:me", {})
+
+        }
+        socket.on("message:save", (data) => {
+            console.log(data)
+        })
+
+        socket.on("broadcast", (data) => {
+            document.write("Brodcast for all")
+        })
+
+        socket.on("broadcast:all:not:me", (data) => {
+            document.write("Brodcast for all without me")
+        })
+
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,5 +1,5 @@
 const { Car } = require("../dataBase/user.model");
-const ApiError = require("../errors/ApiError");
+const ApiError = require("@error");
 const { carValidator, carUpdateValidator } = require("../validators");
 const { carError, statusCode } = require("../constants");
 
