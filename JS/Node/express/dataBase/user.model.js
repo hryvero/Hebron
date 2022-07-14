@@ -25,4 +25,15 @@ const User = new Schema(
   { timestamps: true }
 );
 
+User.virtual("chats", {
+  ref: "Chat_Room_2_User",
+  localField: "_id",
+  foreignField: "user",
+  justOne: false,
+});
+
+User.pre("findOne", function () {
+  this.populate("chats");
+});
+
 module.exports = model("User", User);

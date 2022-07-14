@@ -1,5 +1,13 @@
 const { socketController } = require("../controllers");
 module.exports = (io, socket) => {
+  socket.use((infoArray, next) => {
+    console.log(infoArray);
+
+    next();
+  });
+
+  console.log(socket.handshake);
+
   socket.on("message:save", (data) =>
     socketController.sendMessage(io, socket, data)
   );

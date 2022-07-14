@@ -10,10 +10,12 @@ require("module-alias/register");
 dotenv.config();
 
 const { PORT1, MONGO_URL } = require("./configs/config");
+const cronRun = require("./cron");
 const {
   reportRouter,
   userRouter,
   carRouter,
+  chatRouter,
   authRouter,
   socketRouter,
 } = require("./routes");
@@ -42,6 +44,7 @@ app.use("/auth", authRouter);
 app.use("/reports", reportRouter);
 app.use("/users", userRouter);
 app.use("/cars", carRouter);
+app.use("/chat", chatRouter);
 app.use("*", _notFoundHandler);
 
 app.use(_mainErrorHandler);
@@ -64,4 +67,6 @@ mongoose.connect(MONGO_URL).then((value) => {
 
 server.listen(PORT1, () => {
   console.log(`App listen ${PORT1}`);
+
+  cronRun();
 });
