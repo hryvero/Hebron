@@ -30,6 +30,7 @@
     "@error": "./errors/ApiError"
   },
   "devDependencies": {
+    "@types/module-alias": "^2.0.1",
     "nodemon": "^2.0.16"
   }
 }

@@ -1,3 +1,4 @@
+require("module-alias/register");
 const express = require("express");
 const http = require("http");
 const { engine } = require("express-handlebars");
@@ -5,21 +6,13 @@ const fileUpload = require("express-fileupload");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const socketIO = require("socket.io");
-require("module-alias/register");
 
 dotenv.config();
 
 const { PORT1, MONGO_URL } = require("./configs/config");
 const cronRun = require("./cron");
-const {
-  reportRouter,
-  userRouter,
-  carRouter,
-  chatRouter,
-  authRouter,
-  socketRouter,
-} = require("./routes");
-const ApiError = require("./errors/ApiError");
+const { router, socketRouter } = require("./routes");
+const { _mainErrorHandler } = require("./errors/error.handler");
 const morgan = require("morgan");
 
 const app = express();
@@ -40,26 +33,12 @@ app.use(express.urlencoded({ extended: true }));
 app.use(fileUpload({}));
 app.use(morgan("dev"));
 
-app.use("/auth", authRouter);
-app.use("/reports", reportRouter);
-app.use("/users", userRouter);
-app.use("/cars", carRouter);
-app.use("/chat", chatRouter);
-app.use("*", _notFoundHandler);
+app.use("/", (req, res) => {
+  res.render("start");
+});
+app.use(router);
 
 app.use(_mainErrorHandler);
-
-function _notFoundHandler(req, res, next) {
-  next(new ApiError("Not found", 404));
-}
-
-function _mainErrorHandler(err, req, res, next) {
-  res.status(err.status || 500).json({
-    message: err.message || "Server error",
-    status: err.status,
-    data: {},
-  });
-}
 
 mongoose.connect(MONGO_URL).then((value) => {
   console.log("Connection success");
